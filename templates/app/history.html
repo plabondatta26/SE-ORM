@@ -1,0 +1,162 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="row" id="header-row">
+    <span id="header-span">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="date" id="start" name="start" />
+                    <input type="date" id="end" name="end" />
+                    <input type="submit" id="sub" value="Search" />
+                </form>
+                <span id="btn-span">
+                  <button class="btn btn-success" id="lsm" onclick="mylsm()">Last Month</button>
+                <button class="btn btn-info" id="lsw" onclick="mylsw()">Last Week</button>
+                <button class="btn btn-primary" id="lsd" onclick="mylsd()">Yestarday</button>
+                </span>
+    </span>
+    <ul id="user-span">
+
+    </ul>
+
+</div>
+
+<div class="row">
+    <table class="table table-dark text-center" id="Mytable" style="width:100%;">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">User</th>
+                <th scope="col">Keywords</th>
+                <th scope="col">Count</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+
+<script>
+    var endpoint = '/keyword/history/lsd/'
+    var endpoint1 = '/keyword/history/lsw/'
+    var endpoint2 = '/keyword/history/lsm/'
+    var endpoint3 = '/all/keyword/history/'
+    var endpoint4 = '/date/filter/'
+    var endpoint5 = '/users/'
+    var defaultData2 = []
+    var user_data = []
+    var check_list = []
+    $(document).ready(function() {
+        $.ajax({
+            method: "GET",
+            url: endpoint3,
+            success: function(data) {
+
+                $('#Mytable > tbody').empty();
+                $.each(data, function(key, value) {
+                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                });
+            }
+        });
+
+
+
+        $.ajax({
+            method: "GET",
+            url: endpoint5,
+            success: function(data) {
+                $('#user-span').empty();
+                $.each(data, function(key, value) {
+                    check_list.push(value.id)
+
+
+                    var li = $('<li><input type="checkbox" name="' + value.id + '" id="' + value.id + '" value="' + value.id + '" />' +
+                        '<label for="' + value.id + '"></label></li>');
+                    li.find('label').text(value.first_name + " " + value.last_name);
+                    $('#user-span').append(li);
+                });
+            }
+        });
+
+        console.log(check_list[1]);
+
+
+    });
+
+
+
+
+    $('#sub').on('click', function(event) {
+
+        event.preventDefault();
+        $start = $('#start').val();
+        $end = $('#end').val();
+
+
+        $.ajax({
+            url: endpoint4,
+            type: 'post',
+            data: {
+                start: $start,
+                end: $end,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+
+            success: function(data) {
+                $('#Mytable > tbody').empty();
+                $.each(data, function(key, value) {
+                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                });
+            }
+
+        });
+
+
+
+    });
+
+    function mylsd() {
+        $.ajax({
+            method: "GET",
+            url: endpoint,
+            success: function(data) {
+                $('#Mytable > tbody').empty();
+                $.each(data, function(key, value) {
+                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                });
+            }
+        });
+
+    }
+
+    function mylsw() {
+        $.ajax({
+            method: "GET",
+            url: endpoint1,
+            success: function(data) {
+                $('#Mytable > tbody').empty();
+                $.each(data, function(key, value) {
+                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                });
+            }
+        });
+    }
+
+    function mylsm() {
+        $.ajax({
+            method: "GET",
+            url: endpoint2,
+            success: function(data) {
+                $('#Mytable > tbody').empty();
+                $.each(data, function(key, value) {
+                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                });
+            }
+        });
+    }
+</script>
+
+{% endblock content%}

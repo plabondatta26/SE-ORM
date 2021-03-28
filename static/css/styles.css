@@ -1,0 +1,127 @@
+body {
+    background-color: rgb(163, 181, 214);
+}
+
+.centered-form {
+    margin-top: 60px;
+}
+
+.centered-form .panel {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+}
+
+nav {
+    margin: 0, auto;
+    background-color: rgb(21, 165, 190);
+    padding: 2px 0px;
+    color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+ul {
+    position: relative;
+    top: 8px;
+    left: auto;
+    display: flex;
+    justify-content: center;
+}
+
+li {
+    display: inline;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 10px 30px;
+}
+
+a:hover,
+a:active {
+    background-color: #fff;
+    color: #000;
+    border-radius: 10px;
+}
+
+a {
+    text-decoration: none;
+    padding: 10px;
+    color: #fff;
+}
+
+.card {
+    height: 500px;
+    max-width: 400px;
+    margin: 10px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+#lsm,
+#lsw,
+#lsd {
+    height: 40px;
+    width: 110px;
+    margin: 10px;
+}
+
+#header-row {
+    display: inline;
+}
+
+#header-span {
+    display: flex;
+}
+
+#btn-span {
+    margin-left: 230px;
+}
+
+input {
+    height: 40px;
+    width: 150px;
+    margin: 5px;
+}
+
+button[type="submit"] {
+    margin: 10px;
+}
+
+input[type="submit"] {
+    color: #fff;
+    background-color: #157347;
+    border-color: #146c43;
+    line-height: 1.5;
+    height: 40px;
+    width: 110px;
+    margin: 10px;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+}
+
+input[type="checkbox"] {
+    height: 19px;
+    width: 19px;
+    margin-right: 15px;
+}
+
+ul#user-span {
+    display: inline-block;
+    margin-bottom: 57px;
+    margin-top: 10px;
+}
+
+ul#user-span li {
+    font-size: 19px;
+    margin-right: 110px;
+}
+
+label {
+    color: black;
+    font-size: 19px;
+    font-weight: bold;
+}

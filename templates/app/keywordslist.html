@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="row">
+    <table class="table table-dark text-center" style="width:100%;">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Keywords</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{object.id}}</td>
+                <td>{{object.fields}}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+</div>
+
+{% endblock content%}
