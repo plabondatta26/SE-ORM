@@ -15,8 +15,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from app.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('app.urls')),
+    path('', RegisterView.as_view(), name="register"),
+    path('login/', LoginViewclass.as_view(), name="login"),
+    path('logout/', LogoutView.as_view(), name="logout"),
+    path('get/keyword/', AddUserKeyWordView.as_view(), name="KeyWordView"),
+    path('create/keyword/', AddKeywordView.as_view(), name="AddKeyword"),
+    path('keyword/list/', AllKeywordView.as_view(), name="keywordview"),
+    path('keyword/history/', KeywordHistory.as_view(), name="KeywordHistory"),
+    path('all/keyword/history/', history, name="history"),
+
+    path('keyword/history/lsm/', lst_m, name="lst_m"),
+    path('keyword/history/lsw/', lst_week, name="lst_week"),
+    path('keyword/history/lsd/', yesterday, name="yesterday"),
+    path('date/filter/', date_filter, name="date_filter"),
+
+    path('users/', user_list, name="user_list"),
+    path('users/search/history/', user_history, name="user_history"),
+    path('users/google/search/', google_search, name="google_search"),
+    path('users/max/search/', max_key, name="max_key"),
+    path('key/search/history/', key_search_history, name="key_search_history"),
+
 ]
