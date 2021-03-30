@@ -18,7 +18,7 @@ class LoginForm(forms.Form):
 class KeywordStoreForm(forms.ModelForm):
     class Meta:
         model = KeywordStore
-        fields = ['user', 'key_name']
+        fields = ['user', 'key_name', 'count']
 
 
 class MyKyewordForm(forms.ModelForm):

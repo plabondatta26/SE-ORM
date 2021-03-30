@@ -212,6 +212,8 @@
 
     function mylsd() {
         var chkPassport = document.getElementById("lsd");
+        var IsChecked = $('input[name="lsd"]:checked').length > 0;
+        check_checkbox(IsChecked)
         if (chkPassport.checked) {
             $.ajax({
                 method: "GET",
@@ -232,6 +234,8 @@
 
     function mylsw() {
         var chkPassport = document.getElementById("lsw");
+        var IsChecked = $('input[name="lsw"]:checked').length > 0;
+        check_checkbox(IsChecked)
         if (chkPassport.checked) {
             $.ajax({
                 method: "GET",
@@ -250,7 +254,9 @@
     }
 
     function mylsm() {
-        var chkPassport = document.getElementById("lsd");
+        var chkPassport = document.getElementById("lsm");
+        var IsChecked = $('input[name="lsm"]:checked').length > 0;
+        check_checkbox(IsChecked)
         if (chkPassport.checked) {
             $.ajax({
                 method: "GET",

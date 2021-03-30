@@ -10,9 +10,6 @@ class KeywordStore(models.Model):
     count = models.IntegerField(default=1)
     created_on = models.DateField(auto_now_add=True)
 
-    # def save(self, *args, **kwargs):
-    #     self.key_name = self.key_name.lower()
-    #     return super(KeywordStore, self).save(*args, **kwargs)
     def __str__(self):
         return self.key_name
 
@@ -20,9 +17,9 @@ class KeywordStore(models.Model):
 class MyKeyword(models.Model):
     fields = models.CharField(max_length=100, blank=False, unique=True)
 
-    # def save(self, *args, **kwargs):
-    #     self.fields = self.fields.lower()
-    #     return super(MyKeyword, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.fields = self.fields.lower()
+        return super(MyKeyword, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.fields

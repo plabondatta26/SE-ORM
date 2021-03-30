@@ -14,6 +14,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Max
 from googlesearch import search
 from heapq import nlargest
+from datetime import datetime
+now = datetime.now().date()
 # Create your views here.
 
 
@@ -56,9 +58,8 @@ class AddKeywordView(LoginRequiredMixin, View):
     def post(self, request):
         form = MyKyewordForm(request.POST)
         if form.is_valid():
-            pass
-            # form.save()
-            # return redirect('keywordview')
+            form.save()
+            return redirect('keywordview')
         return render(request, 'app/addkey.html', {'form': form})
 
 
@@ -68,11 +69,41 @@ class AllKeywordView(LoginRequiredMixin, ListView):
     template_name = 'app/keywordslist.html'
 
 
+def google_search(k):
+    result_list = []
+    x = search(k, num_results=10, lang="en")
+    for i in range(0, 5):
+        result_list.append(x[i])
+    result ={
+        'data': result_list
+    }
+    return result
+
+
 class AddUserKeyWordView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = KeywordStoreForm()
         return render(request, 'app/key.html', {'form': form})
+
+    def post(self, request):
+        user_id = request.user.id
+        k = request.POST.get('key_name')
+        data = google_search(k)
+        word_arr = k.split()
+        for i in word_arr:
+            try:
+                key_count = 1
+                myk = MyKeyword.objects.get(fields=i.lower())
+                kc = KeywordStore.objects.filter(key_name=i.lower(), user=user_id).count()
+                print(kc)
+                if kc is not None:
+                    key_count += kc
+                KeywordStore.objects.create(key_name=i.lower(), user_id=user_id, count=key_count)
+
+            except:
+                pass
+        return JsonResponse(data, safe=False)
 
 
 class KeywordHistory(LoginRequiredMixin, View):
@@ -132,38 +163,13 @@ def user_history(request, ):
         }
     return JsonResponse(data, safe=False)
 
-
-def google_search(request):
-    result_list = []
-    src = request.POST.get('key_name')
-    x = search(src, num_results=10, lang="en")
-    for i in range(0, 5):
-        result_list.append(x[i])
-
-    user_id = request.user.id
-
-    word_arr = src.split()
-    for i in word_arr:
-        try:
-            key_count = 1
-            myk = MyKeyword.objects.get(fields=i.lower())
-            key_count += KeywordStore.objects.filter(key_name=i.lower(), user=user_id).count()
-            KeywordStore.objects.create(user=request.user, key_name=myk.fields, count=key_count)
-        except:
-            pass
-
-    data ={
-        'data': result_list
-    }
-    return JsonResponse(data, safe=False)
-
-
 def max_key(request):
     myk = []
     storedk = []
     keys = []
     values = []
     data = []
+    max_val = []
     k = MyKeyword.objects.all()
     for i in k:
         myk.append(i.fields)
@@ -174,7 +180,12 @@ def max_key(request):
         if m is not None:
             keys.append(m.key_name)
             values.append(m.count)
+
     data = dict(zip(keys, values))
+    keys = sorted(data, key=data.get, reverse=True)[:3]
+    for i in keys:
+        max_val.append(data[i])
+    data = dict(zip(keys, max_val))
     return JsonResponse(data, safe=False)
 
 

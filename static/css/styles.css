@@ -98,7 +98,7 @@ input[type="submit"] {
 label {
     color: black;
     font-size: 19px;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .filter-card {
@@ -139,10 +139,12 @@ label {
 
 hr:not([size]) {
     height: 2px;
-    color: #c3c9ce;
+    color: #697682;
 }
 
 .table {
+    margin-top: 20px;
+    ;
     background-color: rgb(21, 165, 190);
     font-size: 20px;
     font-weight: 600;

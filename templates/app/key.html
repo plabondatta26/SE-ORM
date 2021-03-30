@@ -10,7 +10,7 @@
 </div>
 
 <script>
-    var endpoint = '/users/google/search/'
+    var endpoint = '/get/keyword/'
     $('#key_sub').on('click', function(event) {
 
         event.preventDefault();
@@ -26,6 +26,7 @@
 
             success: function(data) {
                 $.each(data, function(key, value) {
+                    $('#result').empty();
                     for (var i = 0; i < value.length; i++) {
                         $('#result').append('<a href="' + value[i] + '">' + value[i] + '</a> <br>');
                     }
