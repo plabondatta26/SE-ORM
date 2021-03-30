@@ -2,7 +2,39 @@
 
 <form action="" method="post">
     {% csrf_token %}
-    <input type="text" id="key_name" name="key_name" placeholder="Enter a keyword " />
-    <input type="submit" class="btn btn-success">
+    <input type="text" id="key_name" name="key_name" placeholder="Enter keyword " />
+    <input type="submit" id="key_sub" class="btn btn-success">
 </form>
+<div id="result">
+
+</div>
+
+<script>
+    var endpoint = '/users/google/search/'
+    $('#key_sub').on('click', function(event) {
+
+        event.preventDefault();
+        $key_name = $('#key_name').val();
+
+        $.ajax({
+            url: endpoint,
+            type: 'post',
+            data: {
+                key_name: $key_name,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+
+            success: function(data) {
+                $.each(data, function(key, value) {
+                    for (var i = 0; i < value.length; i++) {
+                        $('#result').append('<a href="' + value[i] + '">' + value[i] + '</a> <br>');
+                    }
+
+                });
+            }
+
+        });
+
+    });
+</script>
 {% endblock content%}

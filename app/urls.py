@@ -34,5 +34,9 @@ urlpatterns = [
     path('date/filter/', date_filter, name="date_filter"),
 
     path('users/', user_list, name="user_list"),
+    path('users/search/history/', user_history, name="user_history"),
+    path('users/google/search/', google_search, name="google_search"),
+    path('users/max/search/', max_key, name="max_key"),
+    path('key/search/history/', key_search_history, name="key_search_history"),
 
 ]

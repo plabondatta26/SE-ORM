@@ -11,6 +11,9 @@ from django.http import HttpResponse,JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Max
+from googlesearch import search
+from heapq import nlargest
 # Create your views here.
 
 
@@ -53,10 +56,10 @@ class AddKeywordView(LoginRequiredMixin, View):
     def post(self, request):
         form = MyKyewordForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('keywordview')
+            pass
+            # form.save()
+            # return redirect('keywordview')
         return render(request, 'app/addkey.html', {'form': form})
-
 
 
 class AllKeywordView(LoginRequiredMixin, ListView):
@@ -69,24 +72,6 @@ class AddUserKeyWordView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = KeywordStoreForm()
-        return render(request, 'app/key.html', {'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = KeywordStoreForm(request.POST)
-        form.user = request.user
-        user_id = request.user.id
-
-        word_arr = request.POST.get('key_name').split()
-        print(word_arr)
-        for i in word_arr:
-            try:
-                key_count = 1
-                myk = MyKeyword.objects.get(fields=i.lower())
-                key_count += KeywordStore.objects.filter(key_name=i.lower(), user_id=user_id).count()
-                KeywordStore.objects.create(user_id=request.user.id, key_name=myk.fields, count=key_count)
-            except:
-                pass
-
         return render(request, 'app/key.html', {'form': form})
 
 
@@ -131,7 +116,71 @@ def date_filter(request):
 
 def user_list(request):
     users = list(User.objects.all().order_by('-id').values())
-    if request.method == 'POST':
-        pass
     return JsonResponse(users, safe=False)
 
+
+def user_history(request, ):
+    x = []
+    val = request.POST.get('data_id')
+    data = KeywordStore.objects.filter(user=val).order_by('-id').values()
+
+    if data:
+        data = list(data)
+    else:
+        data = {
+            "nothing": "nothing"
+        }
+    return JsonResponse(data, safe=False)
+
+
+def google_search(request):
+    result_list = []
+    src = request.POST.get('key_name')
+    x = search(src, num_results=10, lang="en")
+    for i in range(0, 5):
+        result_list.append(x[i])
+
+    user_id = request.user.id
+
+    word_arr = src.split()
+    for i in word_arr:
+        try:
+            key_count = 1
+            myk = MyKeyword.objects.get(fields=i.lower())
+            key_count += KeywordStore.objects.filter(key_name=i.lower(), user=user_id).count()
+            KeywordStore.objects.create(user=request.user, key_name=myk.fields, count=key_count)
+        except:
+            pass
+
+    data ={
+        'data': result_list
+    }
+    return JsonResponse(data, safe=False)
+
+
+def max_key(request):
+    myk = []
+    storedk = []
+    keys = []
+    values = []
+    data = []
+    k = MyKeyword.objects.all()
+    for i in k:
+        myk.append(i.fields)
+    for j in myk:
+        x = KeywordStore.objects.filter(key_name=j).last()
+        storedk.append(x)
+    for m in storedk:
+        if m is not None:
+            keys.append(m.key_name)
+            values.append(m.count)
+    data = dict(zip(keys, values))
+    return JsonResponse(data, safe=False)
+
+
+def key_search_history(request):
+    data = ''
+    if request.method == 'POST':
+        k = request.POST.get('k')
+        data = list(KeywordStore.objects.filter(key_name=k).order_by('-created_on').values())
+    return JsonResponse(data, safe=False)

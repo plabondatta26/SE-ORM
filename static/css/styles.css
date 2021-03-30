@@ -59,16 +59,8 @@ a {
     padding: 20px;
 }
 
-#lsm,
-#lsw,
-#lsd {
-    height: 40px;
-    width: 110px;
-    margin: 10px;
-}
-
 #header-row {
-    display: inline;
+    display: flex;
 }
 
 #header-span {
@@ -103,25 +95,56 @@ input[type="submit"] {
     border-radius: .25rem;
 }
 
-input[type="checkbox"] {
-    height: 19px;
-    width: 19px;
-    margin-right: 15px;
-}
-
-ul#user-span {
-    display: inline-block;
-    margin-bottom: 57px;
-    margin-top: 10px;
-}
-
-ul#user-span li {
-    font-size: 19px;
-    margin-right: 110px;
-}
-
 label {
     color: black;
     font-size: 19px;
     font-weight: bold;
+}
+
+.filter-card {
+    background-color: #c2dbe0;
+    height: 240px;
+    width: 23%;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    /* text-align: center; */
+}
+
+.filter-card input[type="checkbox"] {
+    height: 19px;
+    width: 19px;
+    margin-left: 2px;
+}
+
+.filter-card p {
+    margin: 0px;
+}
+
+.filter-card input[type="date"] {
+    height: 40px;
+    width: 189px;
+    margin: 5px;
+    border-radius: 6px;
+    border-color: #fff;
+}
+
+#card-header {
+    text-align: center;
+}
+
+#card-header h4 {
+    font-size: 20px;
+}
+
+hr:not([size]) {
+    height: 2px;
+    color: #c3c9ce;
+}
+
+.table {
+    background-color: rgb(21, 165, 190);
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
 }
