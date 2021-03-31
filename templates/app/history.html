@@ -296,7 +296,8 @@
 
                 $('#Mytable > tbody').empty();
                 $.each(data, function(key, value) {
-                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                    console.log(data);
+                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                 });
             }
         });

@@ -15,6 +15,9 @@ from django.db.models import Max
 from googlesearch import search
 from heapq import nlargest
 from datetime import datetime
+from .serializer import KeywordStoreSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 now = datetime.now().date()
 # Create your views here.
 
@@ -132,9 +135,13 @@ def lst_m(request):
     return JsonResponse(data, safe=False)
 
 
+@api_view(['GET'])
 def history(request):
-    data_list = list(KeywordStore.objects.all().order_by('-created_on').values())
-    return JsonResponse(data_list, safe=False)
+    ks = KeywordStore.objects.all().order_by('-created_on')
+    serialize = KeywordStoreSerializer(ks, many=True)
+    return Response(serialize.data)
+# data_list = list(KeywordStore.objects.all().order_by('-created_on').values())
+# return JsonResponse(data_list, safe=False)
 
 
 def date_filter(request):
