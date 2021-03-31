@@ -27,15 +27,15 @@ urlpatterns = [
     path('keyword/history/', KeywordHistory.as_view(), name="KeywordHistory"),
     path('all/keyword/history/', history, name="history"),
 
-    path('keyword/history/lsm/', lst_m, name="lst_m"),
-    path('keyword/history/lsw/', lst_week, name="lst_week"),
-    path('keyword/history/lsd/', yesterday, name="yesterday"),
-    path('date/filter/', date_filter, name="date_filter"),
+    path('keyword/history/lsm/', LastMonth.as_view(), name="lst_m"),
+    path('keyword/history/lsw/', LastWeek.as_view(), name="lst_week"),
+    path('keyword/history/lsd/', Yesterday.as_view(), name="yesterday"),
+    path('date/filter/', DateFilter.as_view(), name="date_filter"),
 
     path('users/', user_list, name="user_list"),
-    path('users/search/history/', user_history, name="user_history"),
+    path('users/search/history/', UserHistory.as_view(), name="user_history"),
     path('users/google/search/', google_search, name="google_search"),
     path('users/max/search/', max_key, name="max_key"),
-    path('key/search/history/', key_search_history, name="key_search_history"),
+    path('key/search/history/', KeySearchHistory.as_view(), name="key_search_history"),
 
 ]

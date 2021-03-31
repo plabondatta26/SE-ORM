@@ -124,8 +124,9 @@
                 clear_table()
                 default_data()
             } else {
+                console.log(this.id);
                 $.ajax({
-                    method: "post",
+                    method: "get",
                     url: endpoint6,
                     data: {
                         data_id: this.id,
@@ -137,7 +138,7 @@
                             if (value === 'nothing') {
                                 alert("Nothing to show for this user");
                             } else {
-                                $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                                $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                             }
                         });
                     }
@@ -151,26 +152,24 @@
             check_checkbox(IsChecked)
             if (IsChecked === 0) {
 
-                console.log(this.id);
+
                 clear_table()
                 default_data()
             } else {
-
                 $.ajax({
-                    method: "post",
+                    method: "get",
                     url: endpoint8,
                     data: {
-                        k: this.id,
+                        key_name: this.id,
                         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
                     },
                     success: function(data) {
-                        console.log(data);
                         clear_table()
                         $.each(data, function(key, value) {
                             if (value === 'nothing') {
                                 alert("Nothing to show for this user");
                             } else {
-                                $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                                $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                             }
                         });
                     }
@@ -192,7 +191,7 @@
 
         $.ajax({
             url: endpoint4,
-            type: 'post',
+            type: 'get',
             data: {
                 start: $start,
                 end: $end,
@@ -202,7 +201,7 @@
             success: function(data) {
                 clear_table()
                 $.each(data, function(key, value) {
-                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                    $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                 });
             }
 
@@ -221,7 +220,7 @@
                 success: function(data) {
                     clear_table()
                     $.each(data, function(key, value) {
-                        $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                        $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                     });
                 }
             });
@@ -243,7 +242,7 @@
                 success: function(data) {
                     clear_table()
                     $.each(data, function(key, value) {
-                        $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                        $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                     });
                 }
 
@@ -264,7 +263,7 @@
                 success: function(data) {
                     clear_table()
                     $.each(data, function(key, value) {
-                        $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user_id + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
+                        $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                     });
                 }
             });
@@ -296,7 +295,6 @@
 
                 $('#Mytable > tbody').empty();
                 $.each(data, function(key, value) {
-                    console.log(data);
                     $('#Mytable').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.key_name + '</td>' + '<td>' + value.count + '</td>' + '</tr>');
                 });
             }

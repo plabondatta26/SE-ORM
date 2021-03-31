@@ -18,6 +18,7 @@ from datetime import datetime
 from .serializer import KeywordStoreSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
 now = datetime.now().date()
 # Create your views here.
 
@@ -114,25 +115,38 @@ class KeywordHistory(LoginRequiredMixin, View):
         return render(request, 'app/history.html')
 
 
-def yesterday(request):
-    now = datetime.now().date()
-    last_date = now - timedelta(days=1)
-    data = list(KeywordStore.objects.filter(created_on=last_date).order_by('-created_on').values())  # wrap in list(), because QuerySet is not JSON serializable
-    return JsonResponse(data, safe=False)
+class Yesterday(ListAPIView):
+    serializer_class = KeywordStoreSerializer
+
+    def get_queryset(self):
+        queryset = KeywordStore.objects.all()
+        yesterday = now - timedelta(days=1)
+        queryset = queryset.filter(created_on__gte=yesterday)
+        return queryset
 
 
-def lst_week(request):
-    now = datetime.now().date()
-    last_week = now - timedelta(days=7)
-    data = list(KeywordStore.objects.filter(created_on__lte=last_week).order_by('-created_on').values())
-    return JsonResponse(data, safe=False)
+class LastWeek(ListAPIView):
+    serializer_class = KeywordStoreSerializer
+
+    def get_queryset(self):
+        queryset = KeywordStore.objects.all()
+        last_week = now - timedelta(days=7)
+
+        if last_week is not None:
+            queryset = queryset.filter(created_on__gte=last_week).order_by('-created_on')
+        return queryset
 
 
-def lst_m(request):
-    now = datetime.now().date()
-    last_month = now - timedelta(days=30)
-    data = list(KeywordStore.objects.filter(created_on__gte=last_month).order_by('-created_on').values())
-    return JsonResponse(data, safe=False)
+class LastMonth(ListAPIView):
+    serializer_class = KeywordStoreSerializer
+
+    def get_queryset(self):
+        queryset = KeywordStore.objects.all()
+        last_month = now - timedelta(days=30)
+
+        if last_month is not None:
+            queryset = queryset.filter(created_on__gte=last_month).order_by('-created_on')
+        return queryset
 
 
 @api_view(['GET'])
@@ -140,16 +154,19 @@ def history(request):
     ks = KeywordStore.objects.all().order_by('-created_on')
     serialize = KeywordStoreSerializer(ks, many=True)
     return Response(serialize.data)
-# data_list = list(KeywordStore.objects.all().order_by('-created_on').values())
-# return JsonResponse(data_list, safe=False)
 
 
-def date_filter(request):
-    if request.method == 'POST':
-        start = request.POST.get('start')
-        end = request.POST.get('end')
-        data = list(KeywordStore.objects.filter(created_on__range=[start, end]).order_by('-created_on').values())
-        return JsonResponse(data, safe=False)
+class DateFilter(ListAPIView):
+    serializer_class = KeywordStoreSerializer
+
+    def get_queryset(self):
+        queryset = KeywordStore.objects.all()
+        st = self.request.query_params.get('start')
+        en = self.request.query_params.get('end')
+
+        if st and en is not None:
+            queryset = queryset.filter(created_on__gte=st, created_on__lte=en).order_by('-created_on')
+        return queryset
 
 
 def user_list(request):
@@ -157,18 +174,16 @@ def user_list(request):
     return JsonResponse(users, safe=False)
 
 
-def user_history(request, ):
-    x = []
-    val = request.POST.get('data_id')
-    data = KeywordStore.objects.filter(user=val).order_by('-id').values()
+class UserHistory(ListAPIView):
+    serializer_class = KeywordStoreSerializer
 
-    if data:
-        data = list(data)
-    else:
-        data = {
-            "nothing": "nothing"
-        }
-    return JsonResponse(data, safe=False)
+    def get_queryset(self):
+        queryset = KeywordStore.objects.all()
+        us = self.request.query_params.get('data_id')
+        if us is not None:
+            queryset = queryset.filter(user=us).order_by('-created_on')
+        return queryset
+
 
 def max_key(request):
     myk = []
@@ -196,9 +211,12 @@ def max_key(request):
     return JsonResponse(data, safe=False)
 
 
-def key_search_history(request):
-    data = ''
-    if request.method == 'POST':
-        k = request.POST.get('k')
-        data = list(KeywordStore.objects.filter(key_name=k).order_by('-created_on').values())
-    return JsonResponse(data, safe=False)
+class KeySearchHistory(ListAPIView):
+    serializer_class = KeywordStoreSerializer
+
+    def get_queryset(self):
+        queryset = KeywordStore.objects.all()
+        kw = self.request.query_params.get('key_name')
+        if kw is not None:
+            queryset = queryset.filter(key_name=kw).order_by('-created_on')
+        return queryset
